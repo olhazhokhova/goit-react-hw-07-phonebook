@@ -1,11 +1,10 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import s from './ContactList.module.css';
-import { deleteContact } from 'redux/contactSlice';
+import { useDeleteContactMutation } from 'redux/contacts';
 
-const ContactList = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(state => state.items.items);
+const ContactList = ({ contacts }) => {
+  const [deleteContact] = useDeleteContactMutation();
 
   const filter = useSelector(state => state.filter.value);
   const filterContacts = contacts.filter(({ name }) =>
@@ -14,16 +13,13 @@ const ContactList = () => {
 
   return (
     <ul className={`${s.list} ${s.scrollbar}`}>
-      {filterContacts.map(({ id, name, number }) => {
+      {filterContacts.map(({ id, name, phone }) => {
         return (
           <li key={id} className={s.item}>
             <span>
-              {name}: {number}
+              {name}: {phone}
             </span>
-            <button
-              className={s.button}
-              onClick={() => dispatch(deleteContact(id))}
-            >
+            <button className={s.button} onClick={() => deleteContact(id)}>
               Delete
             </button>
           </li>

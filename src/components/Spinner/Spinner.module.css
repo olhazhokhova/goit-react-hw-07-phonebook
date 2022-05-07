@@ -1,0 +1,11 @@
+.spinner {
+  margin: 30px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1201;
+}
+
+.spinner>div {
+  padding: 0 !important;
+}

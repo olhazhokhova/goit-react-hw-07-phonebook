@@ -1,10 +1,9 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAddContactMutation } from 'redux/contacts';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
 import s from './AddContacts.module.css';
-import { addContact } from 'redux/contactSlice';
 import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = Yup.object({
@@ -15,7 +14,7 @@ const validationSchema = Yup.object({
       "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
     )
     .required(),
-  number: Yup.string()
+  phone: Yup.string()
     .trim()
     .matches(
       /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
@@ -24,9 +23,8 @@ const validationSchema = Yup.object({
     .required(),
 });
 
-const AddContacts = () => {
-  const dispatch = useDispatch();
-  const contacts = useSelector(state => state.items.items);
+const AddContacts = ({ contacts }) => {
+  const [addContact] = useAddContactMutation();
 
   const handleSubmit = (values, { resetForm }) => {
     const isContactExist = contacts.some(contact => {
@@ -45,14 +43,14 @@ const AddContacts = () => {
       resetForm();
       return;
     }
-    dispatch(addContact(values));
+    addContact(values);
     resetForm();
   };
 
   return (
     <div className={s.formWrap}>
       <Formik
-        initialValues={{ name: '', number: '' }}
+        initialValues={{ name: '', phone: '' }}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
@@ -64,8 +62,8 @@ const AddContacts = () => {
             {msg => <div style={{ color: 'red', fontSize: '13px' }}>{msg}</div>}
           </ErrorMessage>
           <label htmlFor="name">Number</label>
-          <Field type="tel" name="number" />
-          <ErrorMessage name="number">
+          <Field type="tel" name="phone" />
+          <ErrorMessage name="phone">
             {msg => <div style={{ color: 'red', fontSize: '13px' }}>{msg}</div>}
           </ErrorMessage>
           <button type="submit" class={s.button}>

@@ -1,25 +1,29 @@
-import { useSelector } from 'react-redux';
+import { useFetchContactsQuery } from 'redux/contacts';
 import './App.css';
 import AddContacts from './AddContacts';
 import ContactList from './ContactList';
 import Filter from './Filter';
+import Spinner from './Spinner';
 
 const App = () => {
-  const contacts = useSelector(state => state.items.items);
+  const { data: contacts,  isFetching } = useFetchContactsQuery();
 
   return (
     <div className="app-content">
-        <h1>Phonebook</h1>
-        <AddContacts />
+      <h1>Phonebook</h1>
+      <AddContacts contacts={contacts} />
 
-        {contacts.length > 0 && (
-          <>
-            <h2>Contacts</h2>
-            <Filter />
-            <ContactList />
-          </>
-        )}
-      </div>
+      {isFetching && <Spinner />}
+      
+      {contacts && (
+        <>
+          <h2>Contacts</h2>
+          <Filter />
+          <ContactList contacts={contacts} />
+        </>
+      )}
+
+    </div>
   );
 };
 
