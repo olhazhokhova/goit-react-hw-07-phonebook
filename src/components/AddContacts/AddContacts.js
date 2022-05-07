@@ -3,6 +3,7 @@ import { useAddContactMutation } from 'redux/contacts';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { ToastContainer, toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 import s from './AddContacts.module.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -28,6 +29,8 @@ const AddContacts = ({ contacts }) => {
 
   const handleSubmit = (values, { resetForm }) => {
     const isContactExist = contacts.some(contact => {
+      console.log(contact);
+      console.log(values);
       return contact.name.toLowerCase().includes(values.name.toLowerCase());
     });
     if (isContactExist) {
@@ -66,7 +69,7 @@ const AddContacts = ({ contacts }) => {
           <ErrorMessage name="phone">
             {msg => <div style={{ color: 'red', fontSize: '13px' }}>{msg}</div>}
           </ErrorMessage>
-          <button type="submit" class={s.button}>
+          <button type="submit" className={s.button}>
             Add contact
           </button>
         </Form>
@@ -76,3 +79,13 @@ const AddContacts = ({ contacts }) => {
 };
 
 export default AddContacts;
+
+AddContacts.propTypes = {
+  contacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string,
+      phone: PropTypes.string,
+    })
+  ),
+};
