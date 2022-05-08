@@ -29,8 +29,6 @@ const AddContacts = ({ contacts }) => {
 
   const handleSubmit = (values, { resetForm }) => {
     const isContactExist = contacts.some(contact => {
-      console.log(contact);
-      console.log(values);
       return contact.name.toLowerCase().includes(values.name.toLowerCase());
     });
     if (isContactExist) {
